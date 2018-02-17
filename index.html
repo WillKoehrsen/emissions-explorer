@@ -1,157 +1,179 @@
 <!DOCTYPE html>
 <html>
 <title>Emissions Explorer</title>
-<link rel="shortcut icon" href="/static/img/global.jpg"
-<head>
-    <meta charset="utf-8">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
-    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="/static/img/global.jpg" <head>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+<link href="static/css/landing-page.css" rel="stylesheet">
+<style>
+/* Background is an image*/
 
-    <link href="static/css/landing-page.css" rel="stylesheet">
-	<style>
- /* Background is an image*/
-	body {
-		background: url("/static/img/1080_090501-0963-CycloneOfLt.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-	}
-	  header { zoom: 1.2; }
-      header h1 { margin-bottom: 10px; }
-      header h1 a { color: #494949; font-weight: bold; }
-      header h3 { margin-top: 20px; margin-bottom: 5px; }
-      header p.view { margin-bottom: 5px; }
-      header p.view small { padding-top: 2px; }
-      header ul {
-        zoom: 0.7;
-        margin-top: 25px;
-      }
+body {
+    background: url("/static/img/1080_090501-0963-CycloneOfLt.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
-	.button {
+header {
+    zoom: 1.2;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+header h1 a {
+    color: #494949;
+    font-weight: bold;
+}
+
+header h3 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+header p.view {
+    margin-bottom: 5px;
+}
+
+header p.view small {
+    padding-top: 2px;
+}
+
+header ul {
+    zoom: 0.7;
+    margin-top: 25px;
+}
+
+.button {
     opacity: 0;
-  -webkit-border-radius: 14;
-  -moz-border-radius: 14;
-  font-family: Arial;
-  color: #ffffff;
-  font-weight: 400;
-  font-size: 20px;
-  padding: 10px 0px 10px 20px;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-  width: 400px;
-  margin: 4px auto;
+    -webkit-border-radius: 14;
+    -moz-border-radius: 14;
+    font-family: Arial;
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 10px 0px 10px 20px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    width: 400px;
+    margin: 4px auto;
 }
-.features-icons-icon.d.flex {
-  height: 6px;
-}
-.lead.mb-0 {
-  font-weight:520;
-  height: 0em;
-  margin-top: -1em;
-}
-.col-lg-4 {
-  text-align: center;
-  -webkit-text-fill-color:white;
-  font-size: 16pt;
-}
-.button:hover {
-  background: #3cb0fd;
-  text-decoration: none;
-}
-	.options {
-		margin: 80px auto;
-	}
 
-.container{
-  transform: translateY(50px);
-  padding-top:20px;
+.features-icons-icon.d.flex {
+    height: 6px;
+}
+
+.lead.mb-0 {
+    font-weight: 520;
+    height: 0em;
+    margin-top: -1em;
+}
+
+.col-lg-4 {
+    text-align: center;
+    -webkit-text-fill-color: white;
+    font-size: 16pt;
+}
+
+.button:hover {
+    background: #3cb0fd;
+    text-decoration: none;
+}
+
+.options {
+    margin: 80px auto;
+}
+
+.container {
+    transform: translateY(50px);
+    padding-top: 20px;
 }
 
 h1 {
-  color: #312e2e;
-  font-size: 66px;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  margin: .3em 0 .1em 0;
-  transform: translateY(80%);
-  text-rendering: optimizeLegibility;
-  font-family: Geneva;
+    color: #312e2e;
+    font-size: 66px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin: .3em 0 .1em 0;
+    transform: translateY(80%);
+    text-rendering: optimizeLegibility;
+    font-family: Geneva;
 }
 
 features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3 {
-  margin: 10px;
+    margin: 10px;
 }
 
 h3 {
-  margin-top: 0em;
+    margin-top: 0em;
 }
 
 a.button {
-  height: 70px;
-  opacity: 1;
+    height: 70px;
+    opacity: 1;
 }
 </style>
-
-
 </head>
 
 <body>
-<div class='title'>
-  <h1><center> Emissions Explorer </center></h1>
-  </div>
-<!-- Parts of the application -->
-      <div class="container">
+    <div class='title'>
+        <h1><center> Emissions Explorer </center></h1>
+    </div>
+    <!-- Parts of the application -->
+    <div class="container">
         <div class="row">
-          <div class="col-lg-4">
-            
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              
-              <a href='/static/html/map.html' class = "button">
-                <div class="features-icons-icon d-flex">
-                <i class="icon-globe m-auto text-primary"></i>
-              </div>
-              <h3>Global Map</h3>
-              <p class="lead mb-0">Worldwide Historical Emissions</p>
-            </a>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                    <a href='/static/html/map.html' class="button">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-globe m-auto text-primary"></i>
+                        </div>
+                        <h3>Global Map</h3>
+                        <p class="lead mb-0">Worldwide Historical Emissions</p>
+                    </a>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              <a href='/static/html/chart.html' class = "button">
-                <div class="features-icons-icon d-flex">
-                <i class="icon-graph m-auto text-primary"></i>
-              </div>
-              <h3>Chart</h3>
-              <p class="lead mb-0">Emissions for Top 15 Countries</p>
-            </a>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                    <a href='/static/html/chart.html' class="button">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-graph m-auto text-primary"></i>
+                        </div>
+                        <h3>Chart</h3>
+                        <p class="lead mb-0">Emissions for Top 15 Countries</p>
+                    </a>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <a href='static/html/socio.html' class='button'>
-                <div class="features-icons-icon d-flex">
-                <i class="icon-check m-auto text-primary"></i>
-              </div>
-              <h3>Demographics</h3>
-              <p class="lead mb-0">Socio-Economic Indicators and Emissions</p>
-            </a>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                    <a href='static/html/socio.html' class='button'>
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-check m-auto text-primary"></i>
+                        </div>
+                        <h3>Demographics</h3>
+                        <p class="lead mb-0">Socio-Economic Indicators and Emissions</p>
+                    </a>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <a href='/static/html/about.html' class="button">
-                <div class="features-icons-icon d-flex">
-                <i class="icon-book-open m-auto text-primary"></i>
-              </div>
-              <h3>About</h3>
-              <p class="lead mb-0">Purpose, References, Info</p>
-            </a>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                    <a href='/static/html/about.html' class="button">
+                        <div class="features-icons-icon d-flex">
+                            <i class="icon-book-open m-auto text-primary"></i>
+                        </div>
+                        <h3>About</h3>
+                        <p class="lead mb-0">Purpose, References, Info</p>
+                    </a>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 </body>
+
 </html>
