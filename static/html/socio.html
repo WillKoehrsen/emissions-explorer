@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.13.0/d3-legend.min.js"></script>
+    
+    <style>
+    #chart {
+        margin-top: -40px;
+        margin-left: -40px;
+        margin-bottom: 20px;
+        height: 600px;
+    }
+
+    .dot {
+        opacity: 0.8;
+        stroke-width: 1.5;
+        stroke: #000;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .label {
+        fill: #777;
+    }
+
+    .label text{
+        fill: black;
+    }
+
+    text.label {
+        font: 24px sans-serif;
+        fill: black;
+    }
+
+    .year.label {
+        font: 500 196px "Helvetica Neue";
+        fill: #333333bf;
+    }
+
+    .year.label.active {
+        fill: #aaa;
+    }
+
+    .overlay {
+        fill: none;
+        pointer-events: all;
+        cursor: ew-resize;
+    }
+
+    g.tick {
+        font: 15px sans-serif;
+    }
+
+    text.annotation {
+        font-size: 14px;
+    }
+
+    aside.note{
+        font-size:18px;
+        color: black;
+    }
+
+    aside.hack{
+        font-size:16px
+        padding: 4pt;
+    }
+
+    center {
+        margin-top:0.5em;
+    }
+
+    a.button {
+        font-size: 20pt;
+    }
+
+    a {
+        font-size:14pt;
+    }
+
+    h2 {
+        color: black;
+    }
+
+
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/gapminder_style.css" />
+</head>
+
+
+<body data-gr-c-s-loaded="true">
+<header>
+  <aside></aside>
+  <a Will Koehrsen</a>
+
+</header>
+
+<h1><center>Demographics and Emissions Trends<center></h1>
+
+<p id="chart"></p>
+
+<center><aside class='note'>Size Represents Emissions and Color Represents Rank <br/> Mouse-over the year to move forward and backwards through time.</aside></center>
+
+
+
+
+    <script type="text/javascript">
+    // Various accessors that specify the four dimensions of data to visualize.
+    function x(d) { return d.pop; }
+
+    function y(d) { return d.gdp; }
+
+    function radius(d) { return d.emissions; }
+
+    function fill(d) { return d.fill; }
+
+    function key(d) { return d.name; }
+
+    
+
+    // Chart dimensions.
+    var margin = { top: 80, right: 50, bottom: 30, left: 150 },
+        width = 1000 - margin.right,
+        height = 600 - margin.top - margin.bottom;
+
+    // Various scales. These domains make assumptions of data, naturally.
+    var xScale = d3.scale.log().domain([1000000, 2e9]).range([0, width]),
+        yScale = d3.scale.linear().domain([0, 5e4]).range([height, 0]),
+        radiusScale = d3.scale.sqrt().domain([-1, 10500]).range([0, 200]);
+
+    // The x & y axes.
+    var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(6, d3.format(".1r")),
+        yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(10, d3.format(".2r"));
+
+    // Create the SVG container and set the origin.
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add the x-axis.
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the y-axis.
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    // Add an x-axis label.
+    svg.append("text")
+        .attr("class", "x label")
+        .attr('color', 'black')
+        .attr("text-anchor", "end")
+        .attr("x", 530)
+        .attr("y", 515)
+        .text("Population");
+
+    // Add a y-axis label.
+    svg.append("text")
+        .attr("class", "y label")
+        .attr('color', 'black')
+        .attr("text-anchor", "end")
+        .attr("dy", "1em")
+        .attr("transform", "rotate(-90)")
+        .text("GDP Per Capita (US $)");
+
+    // Add the year label; the value is set on transition.
+    var label = svg.append("text")
+        .attr("class", "year label")
+        .attr("text-anchor", "end")
+        .attr("y", height - 24)
+        .attr("x", 460)
+        .text(1850);
+
+    d3.select("#chart").attr("align","center");
+
+    d3.json("/static/data/socio_econ.json", function(nations) {
+                // A bisector since many nation's data is sparsely-defined.
+                var bisect = d3.bisector(function(d) { return d[0]; });
+
+                // Add a dot per nation. Initialize the data at 1800, and set the colors.
+                var dot = svg.append("g")
+                    .attr("class", "dots")
+                    .selectAll(".dot")
+                    .data(interpolateData(1850))
+                    .enter().append("circle")
+                    .attr("class", "dot")
+                    .call(position)
+                    .sort(order);
+
+                var annotation = svg.append("g")
+                    .attr("class", "annotations")
+                    .selectAll(".annotation")
+                    .data(interpolateData(1850))
+                    .enter().append("text")
+                    .attr("class", "annotation")
+                    .call(textPosition)
+                    .attr("font-size", '11px')
+                    .attr("fill", 'black');
+
+                // Add a title.
+                dot.append("title")
+                    .text(function(d) { return d.name; });
+
+                // Add an overlay for the year label.
+                var box = label.node().getBBox();
+
+                var overlay = svg.append("rect")
+                    .attr("class", "overlay")
+                    .attr("x", box.x)
+                    .attr("y", box.y)
+                    .attr("width", box.width)
+                    .attr("height", box.height)
+                    .on("mouseover", enableInteraction);
+
+                // Start a transition that interpolates the data based on year.
+                svg.transition()
+                    .duration(50000)
+                    .ease("linear")
+                    .tween("year", tweenYear)
+                    .each("end", enableInteraction);
+
+                // Positions the dots based on data.
+                function position(dot) {
+                    dot.attr("cx", function(d) { return xScale(x(d)); })
+                        .attr("cy", function(d) { return yScale(y(d)); })
+                        .attr("r", function(d) { return radiusScale(radius(d)) })
+                        .style('fill', function (d) {return d.fill});
+                }
+
+                function textPosition(annotation) {
+                    annotation.attr("x", function(d) { return (xScale(x(d)) - 40);})
+                              .attr("y", function(d) { return yScale(y(d)); })
+                              .text(function(d) {return d.name + ' # ' + d.rank});
+                }
+
+                // Defines a sort order so that the smallest dots are drawn on top.
+                function order(a, b) {
+                    return radius(b) - radius(a);
+                }
+
+                // After the transition finishes, you can mouseover to change the year.
+                function enableInteraction() {
+                    var yearScale = d3.scale.linear()
+                        .domain([1850, 2014])
+                        .range([box.x + 40, box.x + box.width - 40])
+                        .clamp(true);
+
+                    // Cancel the current transition, if any.
+                    svg.transition().duration(0);
+
+                    overlay
+                        .on("mouseover", mouseover)
+                        .on("mouseout", mouseout)
+                        .on("mousemove", mousemove)
+                        .on("touchmove", mousemove);
+
+                    function mouseover() {
+                        label.classed("active", true);
+                    }
+
+                    function mouseout() {
+                        label.classed("active", false);
+                    }
+
+                    function mousemove() {
+                        displayYear(yearScale.invert(d3.mouse(this)[0]));
+                    }
+                }
+
+                // Tweens the entire chart by first tweening the year, and then the data.
+                // For the interpolated data, the dots and label are redrawn.
+                function tweenYear() {
+                    var year = d3.interpolateNumber(1850, 2014);
+                    return function(t) { displayYear(year(t)); };
+                }
+
+                // Updates the display to show the specified year.
+                function displayYear(year) {
+                    dot.data(interpolateData(year), key)
+                        .call(position)
+                        .sort(order);
+
+                    annotation.data(interpolateData(year), key)
+                        .call(textPosition);
+
+                    label.text(Math.round(year));
+                }
+
+                // Interpolates the dataset for the given (fractional) year.
+                function interpolateData(year) {
+                    return nations.map(function(d) {
+                        return {
+                            name: d.name,
+                            rank: findRank(d.rank, year),
+                            fill: interpolateValues(d.color, year),
+                            gdp: interpolateValues(d.gdp, year),
+                            pop: interpolateValues(d.pop, year),
+                            emissions: interpolateValues(d.emissions, year)
+                        };
+                    });
+                }
+
+                function findRank(values, year) {
+                    var i = bisect.left(values, year, 0, values.length - 1),
+                        a = values[i];
+                        return a[1];
+                }
+                // Finds (and possibly interpolates) the value for the specified year.
+                function interpolateValues(values, year) {
+                    var i = bisect.left(values, year, 0, values.length - 1),
+                        a = values[i];
+                    if (i > 0 & typeof(a[1]) === "number") {
+                        var b = values[i - 1],
+                            t = (year - a[0]) / (b[0] - a[0]);
+                        return a[1] * (1 - t) + b[1] * t;
+                    }
+                    return a[1];
+                }
+            });
+    </script>
+
+    <div class="button_holder_home"><center>
+        <a href='/' class="button">Home</a>
+    </center>
+    </div>
+    <div class="button_holder_map"><center>
+        <a href='/static/html/map.html' class="button">Map</a>
+    </center>
+    </div>
+</body>
+
+<footer><center>
+  <aside class = 'hack'><a href = "http://hack.cwru.edu/">Hack CWRU V</a></aside>
+  <a href="https://medium.com/@williamkoehrsen/" rel="author">Will Koehrsen</a>
+</center>
+</footer>
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

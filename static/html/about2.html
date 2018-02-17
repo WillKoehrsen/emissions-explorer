@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="">
+  <meta http-equiv="X-UA-Compatible" content="">
+
+  <title>About</title>
+  <meta name="description" content="About the emissions explorer">
+  <meta name="author" content="Will Koehrsen">
+
+  <!--  Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="">
+
+    <!-- Place favicon.ico & apple-touch-icon.png
+        in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="/global.jpg">
+  
+      <!--<link rel="stylesheet" href="https://github.com/themes/minimal/stylesheets/styles.css">-->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+      header { zoom: 1.2; }
+      header h1 { margin-bottom: 10px; }
+      header h1 a { color: #494949; font-weight: bold; }
+      header h3 { margin-top: 20px; margin-bottom: 5px; }
+      header p.view { margin-bottom: 5px; }
+      header p.view small { padding-top: 2px; }
+      header ul {
+        zoom: 0.7;
+        margin-top: 25px;
+      }
+      section p { margin-top: 10px; }
+      section h1 { margin-bottom: 15px; }
+      section h2 { margin-bottom: 10px; }
+      section h2 { margin-bottom: 10px; }
+      footer { bottom: 20px; }
+      footer p { margin-bottom: 5px; }
+      .half-width {
+        float: left;
+        width: 200px;
+        list-style: none;
+        padding: 5px;
+        margin: 7px;
+        margin-bottom: 10px;
+      }
+      .half-width h4 {
+        margin-bottom: 5px;
+      }
+      .half-width ul {
+        padding-left: 0;
+      }
+      .half-width ul li {
+        list-style: inside;
+        font-size: 15px;
+      }
+      .clear-fix {
+        clear: both;
+      }
+
+      .about {
+        font-size: 20px;
+        color:black;
+
+      }
+
+      .data {
+        font-size: 20px;
+        color:black;
+      }
+    </style>
+    <!--<script src="https://github.com/themes/minimal/javascripts/scale.fix.js"></script>-->
+    </head>
+    
+  <body id="vitae">
+      <div class="wrapper">
+            <header>
+                <h1><a href="/">Emissions Explorer</a></h1>
+                <h2>Will Koehrsen</h2>
+			<br>
+        <p class="view"><a href="/static/html/map.html">Map<small><br />Global Emisions</small></a></p>
+        <p class="view"><a href="/static/html/chart.html">Chart<small><br />Historical Emissions of Top 15 Countries</small></a></p>
+        <p class="view"><a href="/static/html/socio.html">Demographics<small><br />Socio Economic Indicators and Emissions</small></a></p>
+
+        <p class="view"><a href="https://medium.com/@williamkoehrsen/">Blog<small><br />Data Science/Machine Learning Projects</small></a></p>
+        <p class="view"><a href="/">Home</a></p>
+        		  
+	        <h3>Sources</h3>
+        <p class="view"><a href="http://cait.wri.org/" target="tab">CO2 Emissions</a>
+        <p class="view"><a href="https://github.com/RandomEtc/mind-gapper-js" target="tab">Demographics</a>
+        <p class="view"><a href="https://data.worldbank.org/" target="tab">Additional Demographics</a></li>
+        <p class="view"><a href="hhttps://github.com/mbostock" target="tab">D3 Creator</a></li>
+        <p class="view"><a href="https://www.gapminder.org/" target="tab">Inspiration</a></li>
+        <p class="view"><a href="http://alignedleft.com/" target="tab">D3 Tutorials</a></li>
+              </header>
+      <section id="main">
+	<h1>About</h1>
+<hr/>
+<p class="about">The Emissions Explorer is a tool designed to illuminate the power
+of simple visiualizations to make data come to life. This application was built for HackCWRU V. Currently, the Emissions Explorer consists of three parts: a world map showing historical data for all available countries from 1850-2014; a chart showing the history of the top 15 emitters; and a socio-economic and emissions comparison of the top 15 countries. The application uses d3, a visualization library built on Javascript, and Python was used to format the data. A list of references and data sources is provided on the left. The website is hosted on an Amazon S3 storage bucket with the domain name purchased from Hover. I welcome questions, feedback, and discussion and can be reached on<a href="https://twitter.com/koehrsen_will">Twitter.</a></p>
+<h1>Data</h1>
+<p class = "data">Data for this project came from a number of different sources: CAIT Climate Data, World Bank, and GapMinder (helpfully curated by Tom Carden) with links on the left. All the Jupyter Notebooks for formatting the data are available on the project <a href="https://github.com/WillKoehrsen/emissions-explorer">GitHub</a> with <a href="https://github.com/WillKoehrsen/emissions-explorer/blob/master/static/data/Data%20Formatting.ipynb">this Notebook</a> a helpful look at the process of data cleaning. I believe in the benefits of free and open data and also in making that data understandable. Having the data available is a good start, but if it remains in a spreadsheet, it will not inspire anyone to action. My goals in this project were to explore one method for presenting data, learn some new skills, visualize one crucial public dataset, and hopefully inspire others to start deriving knowledge from data.</p>
+<hr/>
+
+
+<hr/>
+
+      </section>
+            <footer>
+	<p><small>Built with <a href="http://hyde.github.io/">Hyde</a> &mdash;
+	    Layout adapted from <a href="https://github.com/orderedlist">orderedlist</a>.</small></p>
+      </footer>
+              </div>
+    
+        <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4eb74c9f613f5d3567000004');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+        <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
+       change the UA-XXXXX-X to be your site's ID -->
+<script>
+    var _gaq = [['_setAccount', 'UA-11762888-1'], ['_trackPageview']];
+    (function(d, t) {
+    var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+    g.async = true;
+    g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g, s);
+    })(document, 'script');
+</script>
+    
+    
+  </body>
+</html>
