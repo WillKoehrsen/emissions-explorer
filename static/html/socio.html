@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <title>Demographics</title>
-<link rel="shortcut icon" href="/global.jpg">
+<link rel="shortcut icon" href="/https://raw.githubusercontent.com/WillKoehrsen/emissions-explorer/master/static/img/global.jpg">
 
 <head>
     <meta charset="utf-8">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
     <style>
     #chart {
         margin-top: -40px;
@@ -31,7 +31,12 @@
         fill: #777;
     }
 
-    .label text{
+    title {
+        visibility: visible;
+        display: initial ;
+    }
+
+    .label text {
         fill: black;
     }
 
@@ -63,18 +68,17 @@
         font-size: 14px;
     }
 
-    aside.note{
-        font-size:18px;
+    aside.note {
+        font-size: 18px;
         color: black;
     }
 
-    aside.hack{
-        font-size:16px
-        padding: 4pt;
+    aside.hack {
+        font-size: 16px padding: 4pt;
     }
 
     center {
-        margin-top:0.5em;
+        margin-top: 0.5em;
     }
 
     a.button {
@@ -82,7 +86,7 @@
     }
 
     a {
-        font-size:14pt;
+        font-size: 14pt;
     }
 
     h1 {
@@ -92,26 +96,24 @@
     .note {
         transform: translateY(-600px);
     }
-
     </style>
-
     <link rel="stylesheet" type="text/css" href="/static/css/gapminder_style.css" />
 </head>
 
-
 <body data-gr-c-s-loaded="true">
-<header>
-  <aside Will Koehrsen</aside>
-  <a></a>
-
-</header>
-
-<h1><center>Demographics and Emissions Trends<center></h1>
-
-<center><p id="chart"></p></center>
-
-<center><aside class='note'>Size Represents Emissions and Color Represents Rank <br/> Mouse-over the year to move forward and backwards through time.</aside></center>
-
+    <header>
+        <aside Will Koehrsen</aside>
+            <a></a>
+    </header>
+    <h1><center>Demographics and Emissions Trends<center></h1>
+    <center>
+        <p id="chart"></p>
+    </center>
+    <center>
+        <aside class='note'>GDP Per Capita versus Population <br />
+            Size Represents Emissions and Color Represents Rank
+            <br/> Mouse-over the year to move forward and backwards through time.</aside>
+    </center>
     <script type="text/javascript">
     // Four different data elements are presented
     // x position is population
@@ -125,7 +127,7 @@
 
     function key(d) { return d.name; }
 
-    
+
 
     // Dimensions for chart
     var margin = { top: 80, right: 50, bottom: 30, left: 150 },
@@ -139,7 +141,7 @@
         yScale = d3.scale.linear().domain([0, 5e4]).range([height, 0]),
         radiusScale = d3.scale.sqrt().domain([-1, 10500]).range([0, 160]);
 
-   // xaxis and yaxis with formatting for tick markers
+    // xaxis and yaxis with formatting for tick markers
     var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(6, d3.format(".1r")),
         yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(10, d3.format(".2r"));
 
@@ -188,194 +190,198 @@
         .text(1850);
 
     // center the chart
-    d3.select("#chart").attr("align","center");
+    d3.select("#chart").attr("align", "center");
 
     // load the data 
     d3.json("/static/data/socio_econ.json", function(nations) {
-                // used to bisect the data 
-                var bisect = d3.bisector(function(d) { return d[0]; });
+        // used to bisect the data 
+        var bisect = d3.bisector(function(d) { return d[0]; });
 
-                // initialize one nation as one dot starting with the first year of data
-                var dot = svg.append("g")
-                    .attr("class", "dots")
-                    .selectAll(".dot")
-                    .data(interpolateData(1850))
-                    .enter().append("circle")
-                    .attr("class", "dot")
-                    .call(position)
-                    .sort(order);
+        // initialize one nation as one dot starting with the first year of data
+        var dot = svg.append("g")
+            .attr("class", "dots")
+            .selectAll(".dot")
+            .data(interpolateData(1850))
+            .enter().append("circle")
+            .attr("class", "dot")
+            .call(position)
+            .sort(order);
 
-                // add text with country names and rank
-                var annotation = svg.append("g")
-                    .attr("class", "annotations")
-                    .selectAll(".annotation")
-                    .data(interpolateData(1850))
-                    .enter().append("text")
-                    .attr("class", "annotation")
-                    .call(textPosition)
-                    .attr("font-size", '11px')
-                    .attr("fill", 'black');
+        // add text with country names and rank
+        var annotation = svg.append("g")
+            .attr("class", "annotations")
+            .selectAll(".annotation")
+            .data(interpolateData(1850))
+            .enter().append("text")
+            .attr("class", "annotation")
+            .call(textPosition)
+            .attr("font-size", '11px')
+            .attr("fill", 'black');
 
-                
-                dot.append("title")
-                    .text(function(d) { return d.name; });
 
-                // overlay for the year label
-                var box = label.node().getBBox();
+        dot.append("title")
+            .text(function(d) { return d.name; });
 
-                var overlay = svg.append("rect")
-                    .attr("class", "overlay")
-                    .attr("x", box.x)
-                    .attr("y", box.y)
-                    .attr("width", box.width)
-                    .attr("height", box.height)
-                    .on("mouseover", enableInteraction);
+        // overlay for the year label
+        var box = label.node().getBBox();
 
-                // transitions through all the years
-                // duration is total time in milliseconds to run through all years
-                svg.transition()
-                    .duration(40000)
-                    .ease("sin")
-                    .tween("year", tweenYear)
-                    .each("end", enableInteraction);
+        var overlay = svg.append("rect")
+            .attr("class", "overlay")
+            .attr("x", box.x)
+            .attr("y", box.y)
+            .attr("width", box.width)
+            .attr("height", box.height)
+            .on("mouseover", enableInteraction);
 
-                // dots are placed based on the two attributes
-                // radius based on emissions, color based on rank
-                function position(dot) {
-                    dot.attr("cx", function(d) { return xScale(x(d)); })
-                        .attr("cy", function(d) { return yScale(y(d)); })
-                        .attr("r", function(d) { return radiusScale(radius(d)) })
-                        .style("opacity", function (d) {if (d.pop < 1e6) {
-                            return 0.0 } else { return 1.0}
-                        })
-                        .style('fill', function (d) {return d.fill});
-                    }
+        // transitions through all the years
+        // duration is total time in milliseconds to run through all years
+        svg.transition()
+            .duration(40000)
+            .ease("linear")
+            .tween("year", tweenYear)
+            .each("end", enableInteraction);
 
-                // position the text elements for each circle
-                function textPosition(annotation) {
-                    annotation.attr("x", function(d) { return (xScale(x(d)) - 40);})
-                              .attr("y", function(d) { return yScale(y(d)); })
-                              .text(function(d) {return d.name + ' # ' + d.rank})
-                              .style("opacity", function (d) {if (d.pop < 1e6) {return 0.0 } else { return 1.0}
-                        })
-                        
-                          }
+        // dots are placed based on the two attributes
+        // radius based on emissions, color based on rank
+        function position(dot) {
+            dot.attr("cx", function(d) { return xScale(x(d)); })
+                .attr("cy", function(d) { return yScale(y(d)); })
+                .attr("r", function(d) { return radiusScale(radius(d)) })
+                .style("opacity", function(d) {
+                    if (d.pop < 1e6) {
+                        return 0.0
+                    } else { return 1.0 }
+                })
+                .style('fill', function(d) { return d.fill });
+        }
 
-                // smallest dots should be placed on top
-                function order(a, b) {
-                    return radius(b) - radius(a);
-                }
+        // position the text elements for each circle
+        function textPosition(annotation) {
+            annotation.attr("x", function(d) { return (xScale(x(d)) - 40); })
+                .attr("y", function(d) { return yScale(y(d)); })
+                .text(function(d) { return d.name + ' # ' + d.rank })
+                .style("opacity", function(d) {
+                    if (d.pop < 1e6) { return 0.0 } else { return 1.0 }
+                })
 
-                // allows interaction on mouseover
-                function enableInteraction() {
-                    var yearScale = d3.scale.linear()
-                        .domain([1850, 2014])
-                        .range([box.x + 40, box.x + box.width - 40])
-                        .clamp(true);
+        }
 
-                    // cancel the transition on mouse over
-                    svg.transition().duration(0);
+        // smallest dots should be placed on top
+        function order(a, b) {
+            return radius(b) - radius(a);
+        }
 
-                    overlay
-                        .on("mouseover", mouseover)
-                        .on("mouseout", mouseout)
-                        .on("mousemove", mousemove)
-                        .on("touchmove", mousemove);
+        // allows interaction on mouseover
+        function enableInteraction() {
+            var yearScale = d3.scale.linear()
+                .domain([1850, 2014])
+                .range([box.x + 40, box.x + box.width - 40])
+                .clamp(true);
 
-                    // activate the year transition on mouse over the label
-                    function mouseover() {
-                        label.classed("active", true);
-                    }
+            // cancel the transition on mouse over
+            svg.transition().duration(0);
 
-                    function mouseout() {
-                        label.classed("active", false);
-                    }
+            overlay
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout)
+                .on("mousemove", mousemove)
+                .on("touchmove", mousemove);
 
-                    // transition based on position of mouse
-                    function mousemove() {
-                        displayYear(yearScale.invert(d3.mouse(this)[0]));
-                    }
-                }
+            // activate the year transition on mouse over the label
+            function mouseover() {
+                label.classed("active", true);
+            }
 
-                // interpolate the year
-                function tweenYear() {
-                    var year = d3.interpolateNumber(1850, 2014);
-                    return function(t) { displayYear(year(t)); };
-                }
+            function mouseout() {
+                label.classed("active", false);
+            }
 
-                // update the image with the yearly information
-                function displayYear(year) {
-                    if (year > 2000) {
-                        d3.select(".note")
-                        .transition().duration(200).ease('linear')
-                        .style("opacity", 0.0)
-                            
-                    } else {
-                        d3.select(".note")
-                        .transition().duration(200).ease('linear')
-                        .style("opacity", 1.0)
-                          
-                    }
-                    dot.data(interpolateData(year), key)
-                        .call(position)
-                        .sort(order);
+            // transition based on position of mouse
+            function mousemove() {
+                displayYear(yearScale.invert(d3.mouse(this)[0]));
+            }
+        }
 
-                    // text annotation
-                    annotation.data(interpolateData(year), key)
-                        .call(textPosition);
+        // interpolate the year
+        function tweenYear() {
+            var year = d3.interpolateNumber(1850, 2014);
+            return function(t) { displayYear(year(t)); };
+        }
 
-                    // year label in overlay
-                    label.text(Math.round(year));
-                }
+        // update the image with the yearly information
+        function displayYear(year) {
+            if (year > 1995) {
+                d3.select(".note")
+                    .transition().duration(200).ease('linear')
+                    .style("opacity", 0.0)
 
-                // Interpolates the dataset for the given (fractional) year.
-                function interpolateData(year) {
-                    return nations.map(function(d) {
-                        return {
-                            name: d.name,
-                            rank: findValue(d.rank, year),
-                            fill: findValue(d.color, year),
-                            gdp: interpolateValues(d.gdp, year),
-                            pop: interpolateValues(d.pop, year),
-                            emissions: interpolateValues(d.emissions, year)
-                        };
-                    });
-                }
+            } else {
+                d3.select(".note")
+                    .transition().duration(200).ease('linear')
+                    .style("opacity", 1.0)
 
-                // find values based on the year 
-                // no need to interpolate rank and color
-                function findValue(values, year) {
-                    var i = bisect.left(values, year, 0, values.length - 1),
-                        a = values[i];
-                        return a[1];
-                }
-                // emissions, gdp per capita, pop may need to be interpolated based on the year
-                function interpolateValues(values, year) {
-                    var i = bisect.left(values, year, 0, values.length - 1),
-                        a = values[i];
-                    if (i > 0 & typeof(a[1]) === "number") {
-                        var b = values[i - 1],
-                            t = (year - a[0]) / (b[0] - a[0]);
-                        return a[1] * (1 - t) + b[1] * t;
-                    }
-                    return a[1];
-                }
+            }
+            dot.data(interpolateData(year), key)
+                .call(position)
+                .sort(order);
+
+            // text annotation
+            annotation.data(interpolateData(year), key)
+                .call(textPosition);
+
+            // year label in overlay
+            label.text(Math.round(year));
+        }
+
+        // Interpolates the dataset for the given (fractional) year.
+        function interpolateData(year) {
+            return nations.map(function(d) {
+                return {
+                    name: d.name,
+                    rank: findValue(d.rank, year),
+                    fill: findValue(d.color, year),
+                    gdp: interpolateValues(d.gdp, year),
+                    pop: interpolateValues(d.pop, year),
+                    emissions: interpolateValues(d.emissions, year)
+                };
             });
+        }
+
+        // find values based on the year 
+        // no need to interpolate rank and color
+        function findValue(values, year) {
+            var i = bisect.left(values, year, 0, values.length - 1),
+                a = values[i];
+            return a[1];
+        }
+        // emissions, gdp per capita, pop may need to be interpolated based on the year
+        function interpolateValues(values, year) {
+            var i = bisect.left(values, year, 0, values.length - 1),
+                a = values[i];
+            if (i > 0 & typeof(a[1]) === "number") {
+                var b = values[i - 1],
+                    t = (year - a[0]) / (b[0] - a[0]);
+                return a[1] * (1 - t) + b[1] * t;
+            }
+            return a[1];
+        }
+    });
     // end of drawing function
     </script>
-
-    <div class="button_holder_home"><center>
-        <a href='/' class="button">Home</a>
-    </center>
+    <div class="button_holder_home">
+        <center>
+            <a href='/' class="button">Home</a>
+        </center>
     </div>
-    <div class="button_holder_map"><center>
-        <a href='/static/html/map.html' class="button">Map</a>
-    </center>
+    <div class="button_holder_map">
+        <center>
+            <a href='/static/html/map.html' class="button">Map</a>
+        </center>
     </div>
 </body>
-
-<footer><center>
-  <aside class = 'hack'><a href = "http://hack.cwru.edu/">Hack CWRU V</a></aside>
-  <a href="https://medium.com/@williamkoehrsen/" rel="author">Will Koehrsen</a>
-</center>
+<footer>
+    <center>
+        <aside class='hack'><a href="http://hack.cwru.edu/">Hack CWRU V</a></aside>
+        <a href="https://medium.com/@williamkoehrsen/" rel="author">Will Koehrsen</a>
+    </center>
 </footer>
