@@ -1,85 +1,68 @@
 <!DOCTYPE html>
 <html>
 <title>World Map</title>
-<link rel="shortcut icon" href="/global.jpg">
+<link rel="shortcut icon" href="/https://raw.githubusercontent.com/WillKoehrsen/emissions-explorer/master/static/img/global.jpg">
+
 <head>
     <meta charset="utf-8">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.13.0/d3-legend.min.js"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.13.0/d3-legend.min.js"></script>
     <style>
-
     body {
         width: 1560px;
     }
-    
+
     .body {
         font-family: Arial;
     }
-    
+
     .title {
         margin-left: auto;
         margin-right: auto;
         text-align: center;
     }
-    
+
     .button_holder_home {
         float: left;
         width: 0px;
         text-align: center;
     }
-    
+
     .button_holder_chart {
         float: right;
         width: 0px;
         text-align: center;
     }
-    
+
     .button {
         float: left;
         width: 60px;
-        background: #d93934;
-        background-image: -webkit-linear-gradient(top, #d93934, #b8342b);
-        background-image: -moz-linear-gradient(top, #d93934, #b8342b);
-        background-image: -ms-linear-gradient(top, #d93934, #b8342b);
-        background-image: -o-linear-gradient(top, #d93934, #b8342b);
-        background-image: linear-gradient(to bottom, #d93934, #b8342b);
-        border-radius: 12px;
+        background: white;
         font-family: Arial;
-        color: white;
-        font-size: 20px;
+        color: #112ab6;
+        font-size: 24px;
         padding: 10px 20px 10px 20px;
         text-decoration: none;
     }
-    
+
     .button:hover {
-        background: #faca3c;
-        background-image: -webkit-linear-gradient(top, #faca3c, #fab43c);
-        background-image: -moz-linear-gradient(top, #faca3c, #fab43c);
-        background-image: -ms-linear-gradient(top, #faca3c, #fab43c);
-        background-image: -o-linear-gradient(top, #faca3c, #fab43c);
-        background-image: linear-gradient(to bottom, #faca3c, #fab43c);
+        background: #d22114;
+        border-radius: 10pt;
         text-decoration: none;
     }
-    
+
     h1 {
-        display: inline;
-        font-family: Helvetica;
-        text-align: center;
-        vertical-align: middle;
-    }
-    
-    h2 {
         margin: 12px;
         color: darkblue;
         font-family: Georgia;
-        font-size: 32px;
+        font-size: 40px;
         text-align: center;
     }
-    
+
     .animateButton {
         border: 1px solid black;
-        background: #ff0000bf;
+        background: #0066ffbf;
         font-family: monospace;
         padding: 10px 20px;
         font-size: 16px;
@@ -88,20 +71,22 @@
         margin: 0 auto;
         width: 180px;
     }
-    
+
     .select {
+        margin-top: 60px;
         text-align: center;
     }
-    
+
     .yearSelect {
-        background-color: #ff0000bf;
+        background-color: #0066ffbf;
         color: black;
         width: 140px;
     }
-    ::-webkit-input-placeholder { 
-    color: black;
+
+     ::-webkit-input-placeholder {
+        color: black;
     }
-    
+
     input {
         border: 1px solid black;
         padding: 10px 20px;
@@ -111,20 +96,19 @@
         font-size: 16px;
         margin: 4px auto;
     }
-    
+
     input:focus {
-        background-color: yellow;
         outline: none;
-        border: 1px #ccc;
+        border: 1px solid black;
         font-weight: bold;
     }
-    
+
     .map circle {
         stroke: black;
         stroke-width: 0.8;
         opacity: 0.9;
     }
-    
+
     div.tooltip {
         position: absolute;
         text-align: center;
@@ -136,42 +120,41 @@
         pointer-events: none;
         border-radius: 6px;
     }
-    
+
     .select circle {
         fill: none;
         stroke: #00000070;
     }
-    
+
     .legend text {
         fill: #777;
         font: 10px sans-serif;
         text-anchor: middle;
     }
-    
+
     .input {
         float: left;
-        transform: translate(550px, 40px);
+        transform: translate(500px, 40px);
     }
-    
+
     .legends {
         float: left;
         transform: translateX(90%);
     }
-    
+
     .legendOrdinal .legendTitle {
         font-size: 18px;
         transform: translate(-20px, 5px);
     }
-    
+
     .legendSize .legendTitle {
         font-size: 18px;
         transform: translate(120px, -35px);
     }
     </style>
-
     <script type="text/javascript">
     // main function takes in geoJSON data and draws map
-    function draw(geographic_data) {
+    d3.json("/static/data/world_countries_edited.json", function(geographic_data) {
         var year_interval;
         // setting up svg element for map
         "use strict";
@@ -303,13 +286,13 @@
                 var year_idx = 0;
 
                 year_interval = setInterval(function() {
-                        plot_emissions_by_year(years[year_idx]);
-                        year_idx++;
+                    plot_emissions_by_year(years[year_idx]);
+                    year_idx++;
 
-                        if (year_idx >= years.length) {
-                            clearInterval(year_interval);
-                        }
-                    }, 1000) // 1 second can be adjusted if too slow
+                    if (year_idx >= years.length) {
+                        clearInterval(year_interval);
+                    }
+                }, 1000) // 1 second can be adjusted if too slow
             };
 
             // input box for user to enter a year to visualize
@@ -329,13 +312,13 @@
             function plot_emissions_by_year(year) {
                 if (year.toString().length < 4) {} else {
                     if (year < 1850 || year > 2014) {
-                        d3.select("h2")
+                        d3.select("h1")
                             .text("Data encompasses years 1850-2014")
                     } else {
-                        d3.select("h2")
+                        d3.select("h1")
                             .transition()
                             .duration(1000)
-                            .text(year + " Emissions")
+                            .text(year + " CO2 Emissions")
                     };
 
                     // filter data by year parameter passed to function
@@ -443,7 +426,7 @@
             return d;
         }, plot_emissions);
 
-    } // end of draw function
+    }); // end of draw function
     </script>
 </head>
 
@@ -454,22 +437,17 @@
     <div class="button_holder_chart">
         <a href='/static/html/chart.html' class="button">Chart</a>
     </div>
-    <div class="title">
-        <h1> Worldwide CO2 1850-2014
-	  </h1>
-    </div>
-    <h2>2014 Emissions</h2>
+    <div class = 'title'>
+    <h1>2014 CO2 Emissions</h1>
+</div>
     <div class="select">
         <div class="input">
-            <button class="animateButton" id="animateButton">Animate Decades</button>
+            <button class="animateButton" id="animateButton">Animate</button>
             <form id='yearForm' onsubmit="return false">
                 <input class="yearSelect" type="number" min=1850 max=2014 id="yearSelect" placeholder="Enter Year...">
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-    d3.json("/static/data/world_countries_edited.json", draw)
-    </script>
 </body>
 
 </html>
